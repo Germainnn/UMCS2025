@@ -1,0 +1,41 @@
+!DOCTYPE html>
+<html>
+<body>
+<h1>Webhook Test</h1>
+<script>
+    const WEBHOOK = 'https://webhook.site/11e453b1-e116-4947-9501-3016aceedae5';
+    
+    function send(key, value) {
+        const url = WEBHOOK + '?' + key + '=' + encodeURIComponent(value) + '&t=' + Date.now();
+        console.log('Sending:', key, value);
+        
+        // Method 1: Image (most reliable)
+        const img = new Image();
+        img.src = url;
+        
+        // Method 2: Link
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = url;
+        document.head.appendChild(link);
+        
+        // Method 3: Fetch
+        fetch(url, {mode: 'no-cors'}).catch(() => {});
+    }
+    
+    // Send test messages
+    send('test', 'webhook_test_started');
+    send('timestamp', new Date().toISOString());
+    send('user_agent', navigator.userAgent);
+    
+    // Send multiple test messages
+    for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+            send('test_message', 'Message ' + i);
+        }, i * 1000);
+    }
+    
+    document.body.innerHTML += '<p>Test messages sent! Check your webhook.</p>';
+</script>
+</body>
+</html>
